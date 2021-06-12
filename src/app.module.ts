@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CampingModule } from './campings/camping/camping.module';
 import { UserModule } from './users/user/user.module';
+import { AuthModule } from './users/auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserModule } from './users/user/user.module';
     }),
     CampingModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
