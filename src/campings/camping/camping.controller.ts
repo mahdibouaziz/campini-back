@@ -6,37 +6,42 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CampingService } from './camping.service';
 import { CreateCampingDto } from './dto/create-camping.dto';
 import { UpdateCampingDto } from './dto/update-camping.dto';
+import { Camping } from './entities/camping.entity';
 
 @Controller('camping')
 export class CampingController {
   constructor(private readonly campingService: CampingService) {}
 
   @Post()
-  create(@Body() createCampingDto: CreateCampingDto) {
-    return this.campingService.create(createCampingDto);
+  createCamping(@Body() createCampingDto: CreateCampingDto): Promise<Camping> {
+    return this.campingService.createCamping(createCampingDto);
   }
 
   @Get()
-  findAll() {
-    return this.campingService.findAll();
+  getAllCampings(): Promise<Camping[]> {
+    return this.campingService.getAllCampings();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.campingService.findOne(+id);
+  findCampingById(@Param('id', ParseIntPipe) id: number): Promise<Camping> {
+    return this.campingService.findCampingById(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCampingDto: UpdateCampingDto) {
-    return this.campingService.update(+id, updateCampingDto);
+  updateCampingById(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateCampingDto: UpdateCampingDto,
+  ): Promise<Camping> {
+    return this.campingService.updateCampingById(id, updateCampingDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.campingService.remove(+id);
+  deleteCampingById(@Param('id', ParseIntPipe) id: number) {
+    return this.campingService.deleteCampingById(id);
   }
 }
