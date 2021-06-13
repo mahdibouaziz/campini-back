@@ -15,7 +15,7 @@ export class UserDto {
   lastName: string;
 
   @IsNotEmpty()
-  age: number;
+  dateOfBirthday: Date;
 
   @IsNotEmpty()
   rate: number;

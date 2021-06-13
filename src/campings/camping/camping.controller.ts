@@ -19,7 +19,7 @@ import { Camping } from './entities/camping.entity';
 export class CampingController {
   constructor(private readonly campingService: CampingService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard) //to force auth to create campings
   @Post()
   createCamping(@Body() createCampingDto: CreateCampingDto): Promise<Camping> {
     return this.campingService.createCamping(createCampingDto);

@@ -23,5 +23,5 @@ export class CreateUserDto {
   lastName: string;
 
   @IsNotEmpty()
-  age: number;
+  dateOfBirthday: Date;
 }

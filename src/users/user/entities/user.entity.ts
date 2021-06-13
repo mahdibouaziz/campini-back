@@ -25,7 +25,7 @@ export class User {
   lastName: string;
 
   @Column()
-  age: number;
+  dateOfBirthday: Date;
 
   //bech tetbadel w tokhrej tableau wahadha
   @Column()
