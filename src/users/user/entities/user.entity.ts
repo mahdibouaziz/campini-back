@@ -1,7 +1,7 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
+@Unique(['username'])
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -15,8 +15,8 @@ export class User {
   @Column()
   email: string;
 
-  // @Column()
-  // salt: string;
+  @Column()
+  salt: string;
 
   @Column()
   firstName: string;
@@ -30,9 +30,4 @@ export class User {
   //bech tetbadel w tokhrej tableau wahadha
   @Column()
   rate: number;
-
-  @BeforeInsert()
-  async hashPaswword() {
-    this.password = await bcrypt.hash(this.password, 'thisIsTheSalt');
-  }
 }
