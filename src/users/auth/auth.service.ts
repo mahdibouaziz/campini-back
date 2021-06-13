@@ -9,12 +9,15 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '../user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from '../user/dto/login-user.dto';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './dto/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private jwtService: JwtService,
   ) {}
 
   //a method to hash a password with a specific salt
@@ -58,10 +61,18 @@ export class AuthService {
   }
 
   //login users
-  async signIn(loginUserDto: LoginUserDto) {
+  async signIn(loginUserDto: LoginUserDto): Promise<{ accessToken: string }> {
     const username = await this.ValidateUserPassword(loginUserDto);
     if (!username) {
       throw new UnauthorizedException('Incorrect username or password');
     }
+
+    //generating the payload
+    const user = await this.userRepository.findOne({ username });
+    const payload: JwtPayload = { username, email: user.email };
+    //generating the token
+    const accessToken = await this.jwtService.sign(payload);
+
+    return { accessToken };
   }
 }

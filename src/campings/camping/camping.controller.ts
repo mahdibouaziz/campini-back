@@ -7,7 +7,9 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/users/auth/jwt-auth.guard';
 import { CampingService } from './camping.service';
 import { CreateCampingDto } from './dto/create-camping.dto';
 import { UpdateCampingDto } from './dto/update-camping.dto';
@@ -17,6 +19,7 @@ import { Camping } from './entities/camping.entity';
 export class CampingController {
   constructor(private readonly campingService: CampingService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   createCamping(@Body() createCampingDto: CreateCampingDto): Promise<Camping> {
     return this.campingService.createCamping(createCampingDto);
