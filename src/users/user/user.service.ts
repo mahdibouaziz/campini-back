@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -14,12 +15,22 @@ export class UserService {
 
   async updateUser(user: User, updateUserDto: UpdateUserDto): Promise<UserDto> {
     try {
-      console.log(user);
+      //encrypt the password if it exists
+      if (updateUserDto.password) {
+        updateUserDto.password = await this.hashPassword(
+          updateUserDto.password,
+          user.salt,
+        );
+      }
       const user1 = await this.userRepository.findOneOrFail(user.id);
       const newUser = { ...user1, ...updateUserDto };
       return await this.userRepository.save(newUser);
     } catch (error) {
       throw new UnauthorizedException("You're not authorized");
     }
+  }
+
+  private async hashPassword(password: string, salt: string): Promise<string> {
+    return await bcrypt.hash(password, salt);
   }
 }
