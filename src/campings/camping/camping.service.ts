@@ -31,6 +31,10 @@ export class CampingService {
     }
   }
 
+  async getCampingsForUser(user: User): Promise<Camping[]> {
+    return await this.campingRepository.find({ organiser: user });
+  }
+
   async getAllCampings(): Promise<Camping[]> {
     try {
       return await this.campingRepository.find();

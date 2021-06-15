@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/users/auth/get-user.decorator';
 import { JwtAuthGuard } from 'src/users/auth/jwt-auth.guard';
 import { User } from 'src/users/user/entities/user.entity';
@@ -21,14 +22,15 @@ import { Camping } from './entities/camping.entity';
 export class CampingController {
   constructor(private readonly campingService: CampingService) {}
 
-  @Get()
+  @Get('all')
   getAllCampings(): Promise<Camping[]> {
     return this.campingService.getAllCampings();
   }
 
-  @Get(':id')
-  findCampingById(@Param('id', ParseIntPipe) id: number): Promise<Camping> {
-    return this.campingService.findCampingById(id);
+  @Get('user')
+  @UseGuards(AuthGuard())
+  getCampingsForUser(@GetUser() user: User): Promise<Camping[]> {
+    return this.campingService.getCampingsForUser(user);
   }
 
   @UseGuards(JwtAuthGuard) //to force auth to create campings
@@ -53,5 +55,10 @@ export class CampingController {
   @UseGuards(JwtAuthGuard)
   deleteCampingById(@Param('id', ParseIntPipe) id: number) {
     return this.campingService.deleteCampingById(id);
+  }
+
+  @Get(':id')
+  findCampingById(@Param('id', ParseIntPipe) id: number): Promise<Camping> {
+    return this.campingService.findCampingById(id);
   }
 }
