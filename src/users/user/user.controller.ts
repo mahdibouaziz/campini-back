@@ -14,4 +14,22 @@ export class UserController {
   ): Promise<UserDto> {
     return this.userService.updateUserById(id, updateUserDto);
   }
+
+  // @Post('upload-image')
+  // @UseInterceptors(
+  //   FileInterceptor('image', {
+  //     storage: diskStorage({
+  //       destination: './uploads/profileImages',
+  //       filename: (req, file, cb) => {
+  //         const filename: string =
+  //           path.parse(file.originalname).name.replace(/\s/g, '') + uuidv4();
+  //         const extension: string = path.parse(file.originalname).ext;
+  //         cb(null, `${filename}${extension}`);
+  //       },
+  //     }),
+  //   }),
+  // )
+  // async uploadFile(@UploadedFile() file: Express.Multer.File) {
+  //   return await { imagePath: file.path };
+  // }
 }
