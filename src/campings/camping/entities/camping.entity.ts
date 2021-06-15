@@ -35,6 +35,9 @@ export class Camping {
   numberOfParticipants: number;
 
   @Column()
+  image: string;
+
+  @Column()
   price: number;
 
   @ManyToOne(() => User)

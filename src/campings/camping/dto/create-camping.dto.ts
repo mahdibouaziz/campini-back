@@ -6,5 +6,6 @@ export class CreateCampingDto {
   numnberOfDays: number; //9adeh men nhar
   numberMaxOfParticipants: number;
   price: number;
+  image: string;
   organiser_id: number;
 }
