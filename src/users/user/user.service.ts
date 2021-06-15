@@ -12,13 +12,11 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async updateUserById(
-    id: number,
-    updateUserDto: UpdateUserDto,
-  ): Promise<UserDto> {
+  async updateUser(user: User, updateUserDto: UpdateUserDto): Promise<UserDto> {
     try {
-      const user = await this.userRepository.findOneOrFail(id);
-      const newUser = { ...user, ...updateUserDto };
+      console.log(user);
+      const user1 = await this.userRepository.findOneOrFail(user.id);
+      const newUser = { ...user1, ...updateUserDto };
       return await this.userRepository.save(newUser);
     } catch (error) {
       throw new UnauthorizedException("You're not authorized");
