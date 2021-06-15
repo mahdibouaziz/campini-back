@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Camping } from 'src/campings/camping/entities/camping.entity';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 
 @Entity()
 @Unique(['username'])
@@ -30,4 +37,7 @@ export class User {
   //bech tetbadel w tokhrej tableau wahadha
   @Column()
   rate: number;
+
+  @OneToMany(() => Camping, (camping) => camping.organiser, { eager: true })
+  campingsCreated: Camping[];
 }

@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateCampingDto } from './dto/create-camping.dto';
 import { UpdateCampingDto } from './dto/update-camping.dto';
@@ -12,9 +13,19 @@ export class CampingService {
     private campingRepository: Repository<Camping>,
   ) {}
 
-  async createCamping(createCampingDto: CreateCampingDto): Promise<Camping> {
+  async createCamping(
+    createCampingDto: CreateCampingDto,
+    user: User,
+  ): Promise<Camping> {
     try {
-      return await this.campingRepository.save(createCampingDto);
+      const camping = await this.campingRepository.save({
+        ...createCampingDto,
+        organiser: user,
+      });
+
+      delete camping.organiser;
+
+      return camping;
     } catch (error) {
       throw new BadRequestException('Cannot create camping');
     }

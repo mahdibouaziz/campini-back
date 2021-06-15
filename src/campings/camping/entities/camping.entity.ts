@@ -40,7 +40,7 @@ export class Camping {
   @Column()
   price: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.campingsCreated, { eager: false })
   organiser: User;
 
   @ManyToMany(() => User)
