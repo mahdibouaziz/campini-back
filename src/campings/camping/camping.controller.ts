@@ -47,8 +47,9 @@ export class CampingController {
   updateCampingById(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCampingDto: UpdateCampingDto,
+    @GetUser() user: User,
   ): Promise<Camping> {
-    return this.campingService.updateCampingById(id, updateCampingDto);
+    return this.campingService.updateCampingById(id, updateCampingDto, user);
   }
 
   @Delete(':id')

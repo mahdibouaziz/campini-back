@@ -56,9 +56,24 @@ export class CampingService {
   async updateCampingById(
     id: number,
     updateCampingDto: UpdateCampingDto,
+    user: User,
   ): Promise<Camping> {
     try {
       let result = await this.findCampingById(id);
+      // check if the user is the owner of the camping
+      console.log(user.campingsCreated);
+      let owner = false;
+      user.campingsCreated.forEach((item) => {
+        if (item.id == id) {
+          owner = true;
+        }
+      });
+
+      // if he's not the owner throw an exception
+      if (owner == false) {
+        throw new BadRequestException();
+      }
+
       result = { ...result, ...updateCampingDto };
       await this.campingRepository.update(id, result);
       return result;
