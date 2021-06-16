@@ -22,6 +22,15 @@ import { Camping } from './entities/camping.entity';
 export class CampingController {
   constructor(private readonly campingService: CampingService) {}
 
+  @UseGuards(JwtAuthGuard)
+  @Post('joinEvent/:id')
+  async joinEvent(
+    @GetUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.campingService.joinEvent(user, id);
+  }
+
   @Get('all')
   getAllCampings(): Promise<Camping[]> {
     return this.campingService.getAllCampings();

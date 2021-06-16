@@ -43,7 +43,9 @@ export class Camping {
   @ManyToOne(() => User, (user) => user.campingsCreated, { eager: false })
   organiser: User;
 
-  @ManyToMany(() => User)
+  @ManyToMany(() => User, {
+    cascade: true,
+  })
   @JoinTable()
   participants: User[];
 }

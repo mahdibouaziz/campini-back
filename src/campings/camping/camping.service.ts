@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user/entities/user.entity';
 import { LessThan, MoreThan, Repository } from 'typeorm';
@@ -12,6 +16,30 @@ export class CampingService {
     @InjectRepository(Camping)
     private campingRepository: Repository<Camping>,
   ) {}
+
+  async joinEvent(user: User, id: number) {
+    try {
+      //find the camping
+      const camping = await this.campingRepository.findOneOrFail(id);
+
+      if (camping.participants) {
+        camping.participants = [...camping.participants, user];
+        console.log(camping.participants);
+      } else {
+        console.log('empty');
+        camping.participants = [user];
+      }
+
+      //addedd the user to the camping
+      console.log(camping.participants);
+
+      //save it to the database
+      return await this.campingRepository.save(camping);
+    } catch (error) {
+      console.log(error);
+      throw new UnauthorizedException("You're not authorized");
+    }
+  }
 
   async createCamping(
     createCampingDto: CreateCampingDto,
