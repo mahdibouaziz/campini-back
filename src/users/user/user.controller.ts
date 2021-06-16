@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
 import { GetUser } from '../auth/get-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -12,10 +12,38 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch()
-  updateUser(
+  async updateUser(
     @GetUser() user: User,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserDto> {
     return this.userService.updateUser(user, updateUserDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('upComingEvent')
+  async getUpComingEventsOfUser(@GetUser() user: User) {
+    const campings = await (
+      await this.userService.getEventsOfUser(user)
+    ).campingsCreated;
+
+    const myDate = new Date();
+
+    return campings.filter(
+      (camping) => camping.date.getTime() > myDate.getTime(),
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('latestEvents')
+  async getLatestEventsOfUser(@GetUser() user: User) {
+    const campings = await (
+      await this.userService.getEventsOfUser(user)
+    ).campingsCreated;
+
+    const myDate = new Date();
+
+    return campings.filter(
+      (camping) => camping.date.getTime() < myDate.getTime(),
+    );
   }
 }

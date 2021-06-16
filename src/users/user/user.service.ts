@@ -30,6 +30,14 @@ export class UserService {
     }
   }
 
+  async getEventsOfUser(user: User): Promise<User> {
+    try {
+      return await this.userRepository.findOne(user.id);
+    } catch (error) {
+      throw new UnauthorizedException('unauthorized user');
+    }
+  }
+
   private async hashPassword(password: string, salt: string): Promise<string> {
     return await bcrypt.hash(password, salt);
   }
