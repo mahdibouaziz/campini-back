@@ -27,6 +27,16 @@ export class CampingController {
     return this.campingService.getAllCampings();
   }
 
+  @Get('pastEvents')
+  async getPastCampings(): Promise<Camping[]> {
+    return this.campingService.getPastCampings();
+  }
+
+  @Get('upComingEvents')
+  async getUpcomingCampings(): Promise<Camping[]> {
+    return this.campingService.getUpcomingCampings();
+  }
+
   @Get('user')
   @UseGuards(AuthGuard())
   getCampingsForUser(@GetUser() user: User): Promise<Camping[]> {

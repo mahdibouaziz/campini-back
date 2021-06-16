@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { LessThan, MoreThan, Repository } from 'typeorm';
 import { CreateCampingDto } from './dto/create-camping.dto';
 import { UpdateCampingDto } from './dto/update-camping.dto';
 import { Camping } from './entities/camping.entity';
@@ -29,6 +29,26 @@ export class CampingService {
     } catch (error) {
       throw new BadRequestException('Cannot create camping');
     }
+  }
+
+  async getPastCampings(): Promise<Camping[]> {
+    const myDate = new Date();
+    const campings = await this.campingRepository.find({
+      where: { date: LessThan(myDate) },
+    });
+    // console.log(campings[0].date.getTime());
+    // console.log(myDate.getTime());
+    // console.log(myDate.getTime() < campings[0].date.getTime());
+
+    return campings;
+  }
+
+  async getUpcomingCampings(): Promise<Camping[]> {
+    const myDate = new Date();
+    const campings = await this.campingRepository.find({
+      where: { date: MoreThan(myDate) },
+    });
+    return campings;
   }
 
   async getCampingsForUser(user: User): Promise<Camping[]> {
