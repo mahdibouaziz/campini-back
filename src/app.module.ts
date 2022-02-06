@@ -10,10 +10,10 @@ import { AuthModule } from './users/auth/auth.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'nest-mysql',
       port: 3306,
       username: 'root',
-      password: '',
+      password: 'pass',
       database: 'campini',
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
